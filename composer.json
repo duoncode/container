@@ -1,6 +1,6 @@
 {
-	"name": "fiveorbs/registry",
-	"description": "A PSR-11 compatible dependency injection container",
+	"name": "duon/registry",
+	"description": "A PSR-11 compatible dependency injection library",
 	"keywords": [
 		"di",
 		"dependency injection",
@@ -15,24 +15,24 @@
 	"prefer-stable": true,
 	"require": {
 		"php": ">=8.2",
-		"fiveorbs/wire": "dev-main",
+		"duon/wire": "dev-main",
 		"psr/container": "^2.0"
 	},
 	"require-dev": {
-		"fiveorbs/dev": "^1.1",
+		"duon/dev": "^1.1",
 		"dealerdirect/phpcodesniffer-composer-installer": "^1",
-		"ernst/coverlyzer": "^0.1.1",
-		"phpunit/phpunit": "^10",
-		"vimeo/psalm": "^5.7"
+		"ernst/coverlyzer": "^0.2",
+		"phpunit/phpunit": "^12.0",
+		"vimeo/psalm": "^6.10"
 	},
 	"autoload": {
 		"psr-4": {
-			"FiveOrbs\\Registry\\": "src"
+			"Duon\\Registry\\": "src"
 		}
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"FiveOrbs\\Registry\\Tests\\": "tests"
+			"Duon\\Registry\\Tests\\": "tests"
 		},
 		"files": [
 			"tests/Fixtures/globalTestSymbols.php"

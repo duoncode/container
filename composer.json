@@ -44,8 +44,7 @@
 			"composer docstest",
 			"./vendor/bin/phpunit --testdox --no-coverage --colors=always"
 		],
-		"check": "./vendor/bin/psalm --no-cache",
-		"check-github": "./vendor/bin/psalm --output-format=github --shepherd",
+		"types": "./vendor/bin/psalm --no-cache",
 		"coverage": [
 			"./vendor/bin/phpunit --testdox --coverage-text --coverage-php=coverage/cover.php --colors=always",
 			"./vendor/bin/coverlyzer coverage/cover.php"
@@ -53,14 +52,7 @@
 		"ci": [
 			"composer docstest",
 			"composer coverage",
-			"composer check",
-			"composer lint"
-		],
-		"github": [
-			"composer docstest",
-			"composer coverage",
-			"composer check-github",
-			"composer lint"
+			"composer types"
 		],
 		"docstest": "./vendor/bin/docs-test-runner ./docs/code"
 	}

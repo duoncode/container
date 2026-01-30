@@ -30,7 +30,7 @@ class Entry
 	 * @psalm-param non-empty-string $id
 	 * */
 	public function __construct(
-		readonly public string $id,
+		public readonly string $id,
 		protected mixed $definition,
 	) {
 		$this->reify = $this->negotiateReify($definition);
@@ -78,15 +78,15 @@ class Entry
 				$this->args = $args[0];
 			} else {
 				throw new ContainerException(
-					'Registry entry arguments can be passed as a single associative array, ' .
-					'as named arguments, or as a Closure',
+					'Registry entry arguments can be passed as a single associative array, '
+					. 'as named arguments, or as a Closure',
 				);
 			}
 		} elseif ($numArgs > 1) {
 			if (!is_string(array_key_first($args))) {
 				throw new ContainerException(
-					'Registry entry arguments can be passed as a single associative array, ' .
-					'as named arguments, or as a Closure',
+					'Registry entry arguments can be passed as a single associative array, '
+					. 'as named arguments, or as a Closure',
 				);
 			}
 

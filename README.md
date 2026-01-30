@@ -1,5 +1,4 @@
-Duon Registry
-==============
+# Duon Registry
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE.md)
 [![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/duonrun/registry.svg)](https://scrutinizer-ci.com/g/duonrun/registry/code-structure)
@@ -13,4 +12,4 @@ A PSR-11 compatible dependency injection container.
 
 Duon Registry is released under the MIT [license](LICENSE.md).
 
-Copyright © 2023-2024 ebene fünf GmbH. All rights reserved.
+Copyright Thomas Ernst. All rights reserved.

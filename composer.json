@@ -20,7 +20,7 @@
 	"homepage": "https://duon.run/registry",
 	"require": {
 		"php": "^8.5",
-		"duon/wire": "^0.1",
+		"duon/wire": "^0.4",
 		"psr/container": "^2.0"
 	},
 	"require-dev": {
@@ -46,7 +46,6 @@
 		],
 		"check": "./vendor/bin/psalm --no-cache",
 		"check-github": "./vendor/bin/psalm --output-format=github --shepherd",
-		"lint": "./vendor/bin/phpcs -s -p src tests",
 		"coverage": [
 			"./vendor/bin/phpunit --testdox --coverage-text --coverage-php=coverage/cover.php --colors=always",
 			"./vendor/bin/coverlyzer coverage/cover.php"

@@ -4,6 +4,8 @@
 
 Project renamed from duon/registry to duon/container.
 
+Codename: Jonas
+
 ### Changed
 
 - Package renamed from `duon/registry` to `duon/container`

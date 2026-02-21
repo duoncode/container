@@ -11,8 +11,8 @@ use Duon\Container\Exception\ContainerException;
 use Duon\Container\Exception\NotFoundException;
 use Duon\Container\Tests\Fixtures\TestClass;
 use Duon\Container\Tests\Fixtures\TestClassApp;
-use Duon\Container\Tests\Fixtures\TestClassRegistryArgs;
-use Duon\Container\Tests\Fixtures\TestClassRegistrySingleArg;
+use Duon\Container\Tests\Fixtures\TestClassContainerArgs;
+use Duon\Container\Tests\Fixtures\TestClassContainerSingleArg;
 use Duon\Container\Tests\Fixtures\TestClassWithConstructor;
 use Duon\Container\Tests\Fixtures\TestContainer;
 use Duon\Container\Tests\TestCase;
@@ -120,8 +120,8 @@ final class ContainerTest extends TestCase
 	public function testFactoryMethodInstantiation(): void
 	{
 		$container = new Container();
-		$container->add(TestClassRegistryArgs::class)->constructor('fromDefaults');
-		$instance = $container->get(TestClassRegistryArgs::class);
+		$container->add(TestClassContainerArgs::class)->constructor('fromDefaults');
+		$instance = $container->get(TestClassContainerArgs::class);
 
 		$this->assertSame(true, $instance->tc instanceof TestClass);
 		$this->assertSame(true, $instance->app instanceof TestClassApp);
@@ -133,10 +133,10 @@ final class ContainerTest extends TestCase
 	{
 		$container = new Container();
 		$container
-			->add(TestClassRegistryArgs::class)
+			->add(TestClassContainerArgs::class)
 			->constructor('fromArgs')
 			->args(test: 'passed', app: 'passed');
-		$instance = $container->get(TestClassRegistryArgs::class);
+		$instance = $container->get(TestClassContainerArgs::class);
 
 		$this->assertSame(true, $instance->tc instanceof TestClass);
 		$this->assertSame(true, $instance->app instanceof TestClassApp);
@@ -210,7 +210,7 @@ final class ContainerTest extends TestCase
 		$container = new Container();
 		$container->add(TestClassApp::class, new TestClassApp('chuck'));
 		$container->add('class', function (TestClassApp $app) {
-			return new TestClassRegistryArgs(new TestClass(), 'chuck', $app);
+			return new TestClassContainerArgs(new TestClass(), 'chuck', $app);
 		});
 		$instance = $container->get('class');
 
@@ -264,11 +264,11 @@ final class ContainerTest extends TestCase
 	{
 		$this->throws(
 			NotFoundException::class,
-			'Unresolvable id: Duon\Container\Tests\Fixtures\TestClassRegistryArgs',
+			'Unresolvable id: Duon\Container\Tests\Fixtures\TestClassContainerArgs',
 		);
 
 		$container = new Container(autowire: true);
-		$container->get(TestClassRegistryArgs::class);
+		$container->get(TestClassContainerArgs::class);
 	}
 
 	public function testRejectingClassWithNonResolvableParams(): void
@@ -276,20 +276,20 @@ final class ContainerTest extends TestCase
 		$this->throws(NotFoundException::class, 'Unresolvable:');
 
 		$container = new Container();
-		$container->add('unresolvable', TestClassRegistryArgs::class);
+		$container->add('unresolvable', TestClassContainerArgs::class);
 		$container->get('unresolvable');
 	}
 
 	public function testResolveWithArgsArray(): void
 	{
 		$container = new Container();
-		$container->add('class', TestClassRegistryArgs::class)->args([
+		$container->add('class', TestClassContainerArgs::class)->args([
 			'test' => 'chuck',
 			'tc' => new TestClass(),
 		]);
 		$instance = $container->get('class');
 
-		$this->assertSame(true, $instance instanceof TestClassRegistryArgs);
+		$this->assertSame(true, $instance instanceof TestClassContainerArgs);
 		$this->assertSame(true, $instance->tc instanceof TestClass);
 		$this->assertSame('chuck', $instance->test);
 	}
@@ -297,25 +297,25 @@ final class ContainerTest extends TestCase
 	public function testResolveWithSingleNamedArgArray(): void
 	{
 		$container = new Container();
-		$container->add('class', TestClassRegistrySingleArg::class)->args(
+		$container->add('class', TestClassContainerSingleArg::class)->args(
 			test: 'chuck',
 		);
 		$instance = $container->get('class');
 
-		$this->assertSame(true, $instance instanceof TestClassRegistrySingleArg);
+		$this->assertSame(true, $instance instanceof TestClassContainerSingleArg);
 		$this->assertSame('chuck', $instance->test);
 	}
 
 	public function testResolveWithNamedArgsArray(): void
 	{
 		$container = new Container();
-		$container->add('class', TestClassRegistryArgs::class)->args(
+		$container->add('class', TestClassContainerArgs::class)->args(
 			test: 'chuck',
 			tc: new TestClass(),
 		);
 		$instance = $container->get('class');
 
-		$this->assertSame(true, $instance instanceof TestClassRegistryArgs);
+		$this->assertSame(true, $instance instanceof TestClassContainerArgs);
 		$this->assertSame(true, $instance->tc instanceof TestClass);
 		$this->assertSame('chuck', $instance->test);
 	}
@@ -325,7 +325,7 @@ final class ContainerTest extends TestCase
 		$container = new Container();
 		$container->add(TestClassApp::class, new TestClassApp('chuck'));
 		$container->add('class', function (TestClassApp $app, string $name, TestClass $tc) {
-			return new TestClassRegistryArgs($tc, $name, $app);
+			return new TestClassContainerArgs($tc, $name, $app);
 		})->args(app: new TestClassApp('chuck'), tc: new TestClass(), name: 'chuck');
 		$instance = $container->get('class');
 
@@ -338,7 +338,7 @@ final class ContainerTest extends TestCase
 	{
 		$container = new Container();
 		$container->add(TestClassApp::class, new TestClassApp('chuck'));
-		$container->add('class', TestClassRegistryArgs::class)->args(function (TestClassApp $app) {
+		$container->add('class', TestClassContainerArgs::class)->args(function (TestClassApp $app) {
 			return [
 				'test' => 'chuck',
 				'tc' => new TestClass(),
@@ -347,7 +347,7 @@ final class ContainerTest extends TestCase
 		});
 		$instance = $container->get('class');
 
-		$this->assertSame(true, $instance instanceof TestClassRegistryArgs);
+		$this->assertSame(true, $instance instanceof TestClassContainerArgs);
 		$this->assertSame(true, $instance->tc instanceof TestClass);
 		$this->assertSame(true, $instance->app instanceof TestClassApp);
 		$this->assertSame('chuck', $instance->test);
@@ -357,7 +357,7 @@ final class ContainerTest extends TestCase
 	{
 		$container = new Container();
 		$container->add('class', function (TestClassApp $app, string $name, TestClass $tc) {
-			return new TestClassRegistryArgs($tc, $name, $app);
+			return new TestClassContainerArgs($tc, $name, $app);
 		})->args(function () {
 			return [
 				'app' => new TestClassApp('chuck'),
@@ -367,7 +367,7 @@ final class ContainerTest extends TestCase
 		});
 		$instance = $container->get('class');
 
-		$this->assertSame(true, $instance instanceof TestClassRegistryArgs);
+		$this->assertSame(true, $instance instanceof TestClassContainerArgs);
 		$this->assertSame(true, $instance->tc instanceof TestClass);
 		$this->assertSame(true, $instance->app instanceof TestClassApp);
 		$this->assertSame('chuck', $instance->test);

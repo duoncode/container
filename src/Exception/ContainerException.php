@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Duon\Registry\Exception;
+namespace Duon\Container\Exception;
 
 use Psr\Container\ContainerExceptionInterface;
 use RuntimeException;

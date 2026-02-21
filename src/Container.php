@@ -2,27 +2,27 @@
 
 declare(strict_types=1);
 
-namespace Duon\Registry;
+namespace Duon\Container;
 
 use Closure;
-use Duon\Registry\Entry;
-use Duon\Registry\Exception\NotFoundException;
+use Duon\Container\Entry;
+use Duon\Container\Exception\NotFoundException;
 use Duon\Wire\CallableResolver;
 use Duon\Wire\Creator;
 use Duon\Wire\Exception\WireException;
 use Duon\Wire\WireContainer;
 use Override;
-use Psr\Container\ContainerInterface as Container;
+use Psr\Container\ContainerInterface as PsrContainer;
 
 /**
  * @psalm-api
  *
  * @psalm-type EntryArray = array<never, never>|array<string, Entry>
  */
-class Registry implements WireContainer
+class Container implements WireContainer
 {
 	protected Creator $creator;
-	protected readonly ?Container $wrappedContainer;
+	protected readonly ?PsrContainer $wrappedContainer;
 
 	/** @psalm-var EntryArray */
 	protected array $entries = [];
@@ -32,19 +32,19 @@ class Registry implements WireContainer
 
 	public function __construct(
 		public readonly bool $autowire = true,
-		?Container $container = null,
+		?PsrContainer $container = null,
 		protected readonly string $tag = '',
-		protected readonly ?Registry $parent = null,
+		protected readonly ?Container $parent = null,
 	) {
 		if ($container) {
 			$this->wrappedContainer = $container;
-			$this->add(Container::class, $container);
+			$this->add(PsrContainer::class, $container);
 			$this->add($container::class, $container);
 		} else {
 			$this->wrappedContainer = null;
-			$this->add(Container::class, $this);
+			$this->add(PsrContainer::class, $this);
 		}
-		$this->add(Registry::class, $this);
+		$this->add(Container::class, $this);
 		$this->creator = new Creator($this);
 	}
 
@@ -55,16 +55,16 @@ class Registry implements WireContainer
 	}
 
 	/** @psalm-return list<string> */
-	public function entries(bool $includeRegistry = false): array
+	public function entries(bool $includeContainer = false): array
 	{
 		$keys = array_keys($this->entries);
 
-		if ($includeRegistry) {
+		if ($includeContainer) {
 			return $keys;
 		}
 
 		return array_values(array_filter($keys, function ($item) {
-			return $item !== Container::class && !is_subclass_of($item, Container::class);
+			return $item !== PsrContainer::class && !is_subclass_of($item, PsrContainer::class);
 		}));
 	}
 
@@ -93,7 +93,7 @@ class Registry implements WireContainer
 				return $this->parent->get($id);
 			}
 
-			// Autowiring: $id does not exists as an entry in the registry
+			// Autowiring: $id does not exists as an entry in the container
 			if ($this->autowire && class_exists($id)) {
 				return $this->creator->create($id);
 			}
@@ -138,7 +138,7 @@ class Registry implements WireContainer
 	}
 
 	/** @psalm-param non-empty-string $tag */
-	public function tag(string $tag): Registry
+	public function tag(string $tag): Container
 	{
 		if (!isset($this->tags[$tag])) {
 			$this->tags[$tag] = new self(tag: $tag, parent: $this);

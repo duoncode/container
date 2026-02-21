@@ -1,5 +1,5 @@
 {
-	"name": "duon/registry",
+	"name": "duon/container",
 	"description": "A PSR-11 compatible dependency injection library",
 	"keywords": [
 		"di",
@@ -17,7 +17,7 @@
 			"email": "ernst@duon.run"
 		}
 	],
-	"homepage": "https://duon.run/registry",
+	"homepage": "https://duon.run/container",
 	"require": {
 		"php": "^8.5",
 		"duon/wire": "^0.4",
@@ -28,12 +28,12 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Duon\\Registry\\": "src"
+			"Duon\\Container\\": "src"
 		}
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Duon\\Registry\\Tests\\": "tests"
+			"Duon\\Container\\Tests\\": "tests"
 		},
 		"files": [
 			"tests/Fixtures/globalTestSymbols.php"

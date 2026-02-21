@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.0](https://github.com/duonrun/container/releases/tag/0.2.0) (2026-02-21)
+
+Project renamed from duon/registry to duon/container.
+
+### Changed
+
+- Package renamed from `duon/registry` to `duon/container`
+- Namespace changed from `Duon\Registry` to `Duon\Container`
+- Main class renamed from `Registry` to `Container`
+- Parameter `includeRegistry` renamed to `includeContainer`
+
 ## [0.1.0](https://github.com/duonrun/registry/releases/tag/0.1.0) (2026-01-30)
 
 Initial release.

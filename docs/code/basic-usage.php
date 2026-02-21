@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-use Duon\Registry\Registry;
+use Duon\Container\Container;
 
 class Value
 {
@@ -14,10 +14,10 @@ class Value
     }
 }
 
-$registry = new Registry();
-$registry->add(Value::class);
+$container = new Container();
+$container->add(Value::class);
 
-$value = $registry->get(Value::class);
+$value = $container->get(Value::class);
 
 assert($value instanceof Value);
 assert($value->get() === 'string');

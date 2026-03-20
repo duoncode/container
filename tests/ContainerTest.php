@@ -9,6 +9,7 @@ use Duon\Container\Container;
 use Duon\Container\Entry;
 use Duon\Container\Exception\ContainerException;
 use Duon\Container\Exception\NotFoundException;
+use Duon\Container\Tests\Fixtures\ResettableService;
 use Duon\Container\Tests\Fixtures\TestClass;
 use Duon\Container\Tests\Fixtures\TestClassApp;
 use Duon\Container\Tests\Fixtures\TestClassContainerArgs;
@@ -550,6 +551,84 @@ final class ContainerTest extends TestCase
 		$scope->add('name', 'scope')->value();
 
 		$this->assertSame('scope', $scope->get('service'));
+	}
+
+	public function testResetCallsLocalResettableServices(): void
+	{
+		$container = new Container();
+		$scope = $container->scope();
+		$scope->add('service', ResettableService::class)->scoped();
+		$service = $scope->get('service');
+
+		$scope->reset();
+
+		$this->assertSame(1, $service->resetCalls);
+	}
+
+	public function testResetCallsBorrowedRootResettableServicesOnce(): void
+	{
+		$container = new Container();
+		$container->add('service', ResettableService::class)->shared();
+		$scope = $container->scope();
+		$service1 = $scope->get('service');
+		$service2 = $scope->get('service');
+
+		$scope->reset();
+
+		$this->assertSame(true, $service1 === $service2);
+		$this->assertSame(1, $service1->resetCalls);
+	}
+
+	public function testResetIgnoresNonResettableServices(): void
+	{
+		$container = new Container();
+		$scope = $container->scope();
+		$scope->add('service', stdClass::class)->scoped();
+		$scope->get('service');
+		$scope->reset();
+
+		$this->assertSame(false, $scope->has('service'));
+	}
+
+	public function testResetClearsScopeLocalDefinitionsAndCaches(): void
+	{
+		$container = new Container();
+		$container->add('service', fn() => new stdClass())->scoped();
+		$scope = $container->scope();
+		$scope->add('local-value', 'value')->value();
+		$service1 = $scope->get('service');
+		$scope->reset();
+		$service2 = $scope->get('service');
+
+		$this->assertSame(false, $scope->has('local-value'));
+		$this->assertSame(false, $service1 === $service2);
+	}
+
+	public function testResetResetsScopeTagsRecursively(): void
+	{
+		$container = new Container();
+		$container->tag('api')->add('shared', ResettableService::class)->scoped();
+		$scope = $container->scope();
+		$scopeTag = $scope->tag('api');
+		$scopeTag->add('local', ResettableService::class)->scoped();
+		$shared = $scopeTag->get('shared');
+		$local = $scopeTag->get('local');
+
+		$scope->reset();
+
+		$this->assertSame(1, $shared->resetCalls);
+		$this->assertSame(1, $local->resetCalls);
+		$this->assertSame(false, $scope->tag('api')->has('local'));
+	}
+
+	public function testResetOnRootContainerKeepsDefinitions(): void
+	{
+		$container = new Container();
+		$container->add('service', stdClass::class)->shared();
+
+		$container->reset();
+
+		$this->assertSame(true, $container->has('service'));
 	}
 
 	public function testFetchEntriesList(): void

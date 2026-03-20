@@ -36,9 +36,14 @@ $root->add('request-service', RequestService::class)->scoped();
 
 $scope = $root->scope();
 $scope->add(Request::class, $request)->value();
+
+// ... resolve request-local services
+$scope->reset();
 ```
 
 After the first `scope()` call, the root container is frozen and no longer accepts structural mutations. Scope tags can inherit pre-defined root tags while keeping their own local caches.
+
+Services that should be cleaned between scopes can implement `Duon\Container\Resettable` and will be reset during `$scope->reset()`.
 
 ## License
 

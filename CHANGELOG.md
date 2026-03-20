@@ -14,6 +14,8 @@
 - Shared entries resolve in definition-owner context, scoped and transient entries resolve in requester context.
 - Scope tags now layer over matching root tags and keep scope-local caches.
 - Wrapped PSR container fallback now routes through the root container in scoped resolution.
+- Added `Resettable` and scope-local `Container::reset()` cleanup support.
+- Scope reset now clears local entries/caches and resets used resettable services (including scope tags).
 
 ## [0.2.0](https://github.com/duonrun/container/releases/tag/0.2.0) (2026-02-21)
 

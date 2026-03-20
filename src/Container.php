@@ -34,6 +34,9 @@ class Container implements WireContainer
 	/** @psalm-var array<never, never>|array<non-empty-string, self> */
 	protected array $tags = [];
 
+	/** @psalm-var array<int, Resettable> */
+	protected array $usedResettables = [];
+
 	public function __construct(
 		public readonly bool $autowire = true,
 		?PsrContainer $container = null,
@@ -68,6 +71,16 @@ class Container implements WireContainer
 		);
 	}
 
+	public function reset(): void
+	{
+		if (!$this->isScope) {
+			return;
+		}
+
+		$resetIds = [];
+		$this->resetScope($resetIds);
+	}
+
 	#[Override]
 	public function has(string $id): bool
 	{
@@ -98,29 +111,31 @@ class Container implements WireContainer
 	{
 		try {
 			if (array_key_exists($id, $this->instances)) {
-				return $this->instances[$id];
+				return $this->trackAndReturn($this->instances[$id]);
 			}
 
 			$resolved = $this->findEntry($id);
 
 			if ($resolved !== null) {
-				return $this->resolveEntry(
-					entryOwner: $resolved[0],
-					entry: $resolved[1],
-					id: $id,
-					requester: $this,
+				return $this->trackAndReturn(
+					$this->resolveEntry(
+						entryOwner: $resolved[0],
+						entry: $resolved[1],
+						id: $id,
+						requester: $this,
+					),
 				);
 			}
 
 			$wrappedContainer = $this->root()->wrappedContainer;
 
 			if ($wrappedContainer?->has($id)) {
-				return $wrappedContainer->get($id);
+				return $this->trackAndReturn($wrappedContainer->get($id));
 			}
 
 			// Autowiring: $id does not exists as an entry in the container
 			if ($this->autowire && class_exists($id)) {
-				return $this->creator->create($id);
+				return $this->trackAndReturn($this->creator->create($id));
 			}
 		} catch (WireException $e) {
 			throw new NotFoundException('Unresolvable id: ' . $id . ' - Details: ' . $e->getMessage());
@@ -332,6 +347,61 @@ class Container implements WireContainer
 			$callable = [$value, $methodToResolve];
 			$args = (new CallableResolver($context->creator))->resolve($callable, $call->args);
 			$callable(...$args);
+		}
+
+		return $value;
+	}
+
+	/**
+	 * @param array<int, true> $resetIds
+	 */
+	protected function resetScope(array &$resetIds): void
+	{
+		foreach ($this->instances as $instance) {
+			$this->resetIfNeeded($instance, $resetIds);
+		}
+
+		foreach ($this->usedResettables as $usedResettable) {
+			$this->resetIfNeeded($usedResettable, $resetIds);
+		}
+
+		foreach ($this->tags as $tagContainer) {
+			if ($tagContainer->isScope) {
+				$tagContainer->resetScope($resetIds);
+			}
+		}
+
+		$this->instances = [];
+		$this->entries = [];
+		$this->tags = [];
+		$this->usedResettables = [];
+		$this->add(PsrContainer::class, $this);
+		$this->add(Container::class, $this);
+	}
+
+	/**
+	 * @param array<int, true> $resetIds
+	 */
+	protected function resetIfNeeded(mixed $value, array &$resetIds): void
+	{
+		if (!$value instanceof Resettable) {
+			return;
+		}
+
+		$objectId = spl_object_id($value);
+
+		if (isset($resetIds[$objectId])) {
+			return;
+		}
+
+		$resetIds[$objectId] = true;
+		$value->reset();
+	}
+
+	protected function trackAndReturn(mixed $value): mixed
+	{
+		if ($this->isScope && $value instanceof Resettable) {
+			$this->usedResettables[spl_object_id($value)] = $value;
 		}
 
 		return $value;

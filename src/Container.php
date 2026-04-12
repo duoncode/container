@@ -12,7 +12,9 @@ use Duon\Wire\Creator;
 use Duon\Wire\Exception\WireException;
 use Duon\Wire\WireContainer;
 use Override;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface as PsrContainer;
+use Throwable;
 
 /**
  * @psalm-api
@@ -84,7 +86,11 @@ class Container implements WireContainer
 	#[Override]
 	public function has(string $id): bool
 	{
-		return isset($this->entries[$id]) || $this->parent?->has($id) || $this->wrappedContainer?->has($id);
+		return (
+			isset($this->entries[$id])
+			|| $this->parent?->has($id)
+			|| $this->wrappedContainer?->has($id)
+		);
 	}
 
 	/** @psalm-return list<string> */
@@ -138,7 +144,17 @@ class Container implements WireContainer
 				return $this->trackAndReturn($this->creator->create($id));
 			}
 		} catch (WireException $e) {
-			throw new NotFoundException('Unresolvable id: ' . $id . ' - Details: ' . $e->getMessage());
+			throw new NotFoundException(
+				'Unresolvable id: ' . $id . ' - Details: ' . $e->getMessage(),
+				previous: $e,
+			);
+		} catch (ContainerExceptionInterface $e) {
+			throw $e;
+		} catch (Throwable $e) {
+			throw new ContainerException(
+				'Unresolvable id: ' . $id . ' - ' . $e->getMessage(),
+				previous: $e,
+			);
 		}
 
 		throw new NotFoundException('Unresolvable id: ' . $id);
@@ -240,13 +256,21 @@ class Container implements WireContainer
 		throw new NotFoundException('Cannot instantiate ' . $id);
 	}
 
-	protected function resolveEntry(Container $entryOwner, Entry $entry, string $id, Container $requester): mixed
-	{
+	protected function resolveEntry(
+		Container $entryOwner,
+		Entry $entry,
+		string $id,
+		Container $requester,
+	): mixed {
 		if ($entry->shouldReturnValue()) {
 			return $entry->definition();
 		}
 
-		[$cacheContainer, $resolutionContext] = $this->resolutionContainers($entry, $entryOwner, $requester);
+		[$cacheContainer, $resolutionContext] = $this->resolutionContainers(
+			$entry,
+			$entryOwner,
+			$requester,
+		);
 
 		if ($cacheContainer !== null && array_key_exists($id, $cacheContainer->instances)) {
 			return $cacheContainer->instances[$id];
@@ -264,8 +288,11 @@ class Container implements WireContainer
 	/**
 	 * @return array{0: null|Container, 1: Container}
 	 */
-	protected function resolutionContainers(Entry $entry, Container $entryOwner, Container $requester): array
-	{
+	protected function resolutionContainers(
+		Entry $entry,
+		Container $entryOwner,
+		Container $requester,
+	): array {
 		return match ($entry->getLifetime()) {
 			Lifetime::Shared => [$entryOwner, $entryOwner],
 			Lifetime::Scoped => [$requester, $requester],
@@ -287,7 +314,7 @@ class Container implements WireContainer
 					// Don't autowire if $args are given
 					if ($args instanceof Closure) {
 						/** @psalm-var array<string, mixed> */
-						$args = $args(...(new CallableResolver($context->creator))->resolve($args));
+						$args = $args(...new CallableResolver($context->creator)->resolve($args));
 
 						return $this->applyCalls($entry, $context->creator->create($value, $args), $context);
 					}
@@ -319,7 +346,7 @@ class Container implements WireContainer
 			$args = $entry->getArgs();
 
 			if (is_null($args)) {
-				$args = (new CallableResolver($context->creator))->resolve($value);
+				$args = new CallableResolver($context->creator)->resolve($value);
 			} elseif ($args instanceof Closure) {
 				/** @var array<string, mixed> */
 				$args = $args();
@@ -345,7 +372,7 @@ class Container implements WireContainer
 
 			/** @psalm-var callable */
 			$callable = [$value, $methodToResolve];
-			$args = (new CallableResolver($context->creator))->resolve($callable, $call->args);
+			$args = new CallableResolver($context->creator)->resolve($callable, $call->args);
 			$callable(...$args);
 		}
 

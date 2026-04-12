@@ -280,7 +280,7 @@ final class ContainerTest extends TestCase
 
 	public function testRejectingClassWithNonResolvableParams(): void
 	{
-		$this->throws(NotFoundException::class, 'Unresolvable:');
+		$this->throws(NotFoundException::class, 'Unresolvable');
 
 		$container = new Container();
 		$container->add('unresolvable', TestClassContainerArgs::class);

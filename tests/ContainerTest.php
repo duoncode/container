@@ -16,7 +16,6 @@ use Duon\Container\Tests\Fixtures\TestClassContainerArgs;
 use Duon\Container\Tests\Fixtures\TestClassContainerSingleArg;
 use Duon\Container\Tests\Fixtures\TestClassWithConstructor;
 use Duon\Container\Tests\Fixtures\TestContainer;
-use Duon\Container\Tests\TestCase;
 use Psr\Container\ContainerInterface;
 use stdClass;
 

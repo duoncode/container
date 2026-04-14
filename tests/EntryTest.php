@@ -6,7 +6,6 @@ namespace Duon\Container\Tests;
 
 use Duon\Container\Entry;
 use Duon\Container\Lifetime;
-use Duon\Container\Tests\TestCase;
 use stdClass;
 
 final class EntryTest extends TestCase

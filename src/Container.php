@@ -394,9 +394,11 @@ class Container implements WireContainer
 		}
 
 		foreach ($this->tags as $tagContainer) {
-			if ($tagContainer->isScope) {
-				$tagContainer->resetScope($resetIds);
+			if (!$tagContainer->isScope) {
+				continue;
 			}
+
+			$tagContainer->resetScope($resetIds);
 		}
 
 		$this->instances = [];

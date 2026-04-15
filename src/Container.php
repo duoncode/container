@@ -277,6 +277,8 @@ class Container implements WireContainer
 			return $cacheContainer->instances[$id];
 		}
 
+		// materialize() intentionally returns mixed because container entries may resolve to any value type.
+		/** @psalm-suppress MixedAssignment */
 		$result = $this->materialize($entry, $resolutionContext);
 
 		if ($cacheContainer !== null) {
@@ -385,6 +387,8 @@ class Container implements WireContainer
 	 */
 	protected function resetScope(array &$resetIds): void
 	{
+		// $instances stores mixed values by design, so foreach assigns mixed to $instance.
+		/** @psalm-suppress MixedAssignment */
 		foreach ($this->instances as $instance) {
 			$this->resetIfNeeded($instance, $resetIds);
 		}

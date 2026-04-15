@@ -1,5 +1,5 @@
----
-title: Introduction
+-- title: Introduction
+
 ---
 
 # Duon Container
@@ -10,6 +10,6 @@ A PSR-11 compatible dependency injection container
 
 ## Basic usage
 
-```
+```php
 --8<-- "basic-usage.php:7"
 ```

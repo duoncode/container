@@ -5,7 +5,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/1c88bda8fa4c4b56897fd8930f42b1a1)](https://app.codacy.com/gh/duoncode/container/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/1c88bda8fa4c4b56897fd8930f42b1a1)](https://app.codacy.com/gh/duoncode/container/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
 [![Psalm coverage](https://shepherd.dev/github/duoncode/container/coverage.svg?)](https://shepherd.dev/github/duoncode/container)
-[![Psalm level](https://shepherd.dev/github/duoncode/container/level.svg?)](https://duonrun.dev/container)
+[![Psalm level](https://shepherd.dev/github/duoncode/container/level.svg?)](https://duon.sh/container)
 <!-- prettier-ignore-end -->
 
 A PSR-11 compatible dependency injection container.

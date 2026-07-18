@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Celemas\Container;
+namespace Celema\Container;
 
-use Celemas\Container\Exception\ContainerException;
-use Celemas\Container\Exception\NotFoundException;
-use Celemas\Wire\CallableResolver;
-use Celemas\Wire\Creator;
-use Celemas\Wire\Exception\WireException;
-use Celemas\Wire\WireContainer;
+use Celema\Container\Exception\ContainerException;
+use Celema\Container\Exception\NotFoundException;
+use Celema\Wire\CallableResolver;
+use Celema\Wire\Creator;
+use Celema\Wire\Exception\WireException;
+use Celema\Wire\WireContainer;
 use Closure;
 use Override;
 use Psr\Container\ContainerExceptionInterface;

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Celemas\Container\Tests\Fixtures;
+namespace Celema\Container\Tests\Fixtures;
 
-use Celemas\Container\Container;
-use Celemas\Wire\Call;
-use Celemas\Wire\Inject;
+use Celema\Container\Container;
+use Celema\Wire\Call;
+use Celema\Wire\Inject;
 
 #[Call('callThis')]
 class TestClassInject

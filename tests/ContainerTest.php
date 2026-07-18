@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Celemas\Container\Tests;
+namespace Celema\Container\Tests;
 
-use Celemas\Container\Container;
-use Celemas\Container\Entry;
-use Celemas\Container\Exception\ContainerException;
-use Celemas\Container\Exception\NotFoundException;
-use Celemas\Container\Tests\Fixtures\ResettableService;
-use Celemas\Container\Tests\Fixtures\TestClass;
-use Celemas\Container\Tests\Fixtures\TestClassApp;
-use Celemas\Container\Tests\Fixtures\TestClassContainerArgs;
-use Celemas\Container\Tests\Fixtures\TestClassContainerSingleArg;
-use Celemas\Container\Tests\Fixtures\TestClassWithConstructor;
-use Celemas\Container\Tests\Fixtures\TestContainer;
+use Celema\Container\Container;
+use Celema\Container\Entry;
+use Celema\Container\Exception\ContainerException;
+use Celema\Container\Exception\NotFoundException;
+use Celema\Container\Tests\Fixtures\ResettableService;
+use Celema\Container\Tests\Fixtures\TestClass;
+use Celema\Container\Tests\Fixtures\TestClassApp;
+use Celema\Container\Tests\Fixtures\TestClassContainerArgs;
+use Celema\Container\Tests\Fixtures\TestClassContainerSingleArg;
+use Celema\Container\Tests\Fixtures\TestClassWithConstructor;
+use Celema\Container\Tests\Fixtures\TestContainer;
 use Closure;
 use Psr\Container\ContainerInterface;
 use ReflectionProperty;
@@ -155,7 +155,7 @@ final class ContainerTest extends TestCase
 	{
 		$this->throws(
 			NotFoundException::class,
-			'Cannot instantiate Celemas\Container\Tests\NoValidClass',
+			'Cannot instantiate Celema\Container\Tests\NoValidClass',
 		);
 
 		$container = new Container();
@@ -276,7 +276,7 @@ final class ContainerTest extends TestCase
 
 	public function testGettingNonResolvableEntryFails(): void
 	{
-		$this->throws(NotFoundException::class, 'Unresolvable id: Celemas\Container\Tests\InvalidClass');
+		$this->throws(NotFoundException::class, 'Unresolvable id: Celema\Container\Tests\InvalidClass');
 
 		$container = new Container();
 		$container->add('unresolvable', InvalidClass::class);
@@ -287,7 +287,7 @@ final class ContainerTest extends TestCase
 	{
 		$this->throws(
 			NotFoundException::class,
-			'Unresolvable id: Celemas\Container\Tests\Fixtures\TestClassContainerArgs',
+			'Unresolvable id: Celema\Container\Tests\Fixtures\TestClassContainerArgs',
 		);
 
 		$container = new Container(autowire: true);
@@ -677,7 +677,7 @@ final class ContainerTest extends TestCase
 
 		$this->assertSame(['class'], $container->entries());
 		$this->assertSame(
-			['Psr\Container\ContainerInterface', 'Celemas\Container\Container', 'class'],
+			['Psr\Container\ContainerInterface', 'Celema\Container\Container', 'class'],
 			$container->entries(includeContainer: true),
 		);
 	}
@@ -695,7 +695,7 @@ final class ContainerTest extends TestCase
 		$this->assertSame(
 			[
 				'Psr\Container\ContainerInterface',
-				'Celemas\Container\Container',
+				'Celema\Container\Container',
 				'class',
 				'container',
 			],

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Celemas\Container\Tests\Fixtures;
+namespace Celema\Container\Tests\Fixtures;
 
-use Celemas\Container\Resettable;
+use Celema\Container\Resettable;
 
 final class ResettableService implements Resettable
 {

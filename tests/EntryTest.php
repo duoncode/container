@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Celemas\Container\Tests;
+namespace Celema\Container\Tests;
 
-use Celemas\Container\Entry;
-use Celemas\Container\Lifetime;
+use Celema\Container\Entry;
+use Celema\Container\Lifetime;
 use stdClass;
 
 final class EntryTest extends TestCase

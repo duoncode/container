@@ -1,5 +1,5 @@
 {
-	"name": "celemas/container",
+	"name": "celema/container",
 	"description": "A PSR-11 compatible dependency injection library",
 	"keywords": [
 		"di",
@@ -14,26 +14,26 @@
 	"authors": [
 		{
 			"name": "Ernst",
-			"email": "ernst@celemas.dev"
+			"email": "ernst@celema.dev"
 		}
 	],
-	"homepage": "https://celemas.dev/container",
+	"homepage": "https://celema.dev/container",
 	"require": {
 		"php": "^8.5",
-		"celemas/wire": "^0.6.0",
+		"celema/wire": "^0.7",
 		"psr/container": "^2.0"
 	},
 	"require-dev": {
-		"celemas/dev": "^4.2"
+		"celema/dev": "^5.0"
 	},
 	"autoload": {
 		"psr-4": {
-			"Celemas\\Container\\": "src"
+			"Celema\\Container\\": "src"
 		}
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Celemas\\Container\\Tests\\": "tests"
+			"Celema\\Container\\Tests\\": "tests"
 		}
 	},
 	"scripts": {
@@ -41,7 +41,7 @@
 		"docstest": "./vendor/bin/docs-test-runner ./docs/code",
 		"types": "./vendor/bin/psalm --no-cache",
 		"docs:format": "npx prettier@3.6.2 --write --config ./docs/.prettierrc README.md CHANGELOG.md LICENSE.md docs/",
-		"docs:lint": "npx markdownlint-cli2@0.22.1 --config ./vendor/celemas/dev/config/markdownlint.jsonc README.md CHANGELOG.md LICENSE.md docs/",
+		"docs:lint": "npx markdownlint-cli2@0.22.1 --config ./vendor/celema/dev/config/markdownlint.jsonc README.md CHANGELOG.md LICENSE.md docs/",
 		"lint": [
 			"./vendor/bin/mago fmt --check",
 			"./vendor/bin/mago lint"

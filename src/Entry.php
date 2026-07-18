@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Celemas\Container;
+namespace Celema\Container;
 
-use Celemas\Container\Exception\ContainerException;
-use Celemas\Wire\Call;
+use Celema\Container\Exception\ContainerException;
+use Celema\Wire\Call;
 use Closure;
 
 /** @psalm-api */

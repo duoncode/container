@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Celemas\Container\Tests\Fixtures;
+namespace Celema\Container\Tests\Fixtures;
 
-use Celemas\Container\Container;
-use Celemas\Wire\Call;
+use Celema\Container\Container;
+use Celema\Wire\Call;
 
 #[Call('method1'), Call('method2', arg2: 'arg2', arg1: 'arg1')]
 class TestClassCall

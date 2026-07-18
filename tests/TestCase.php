@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Celemas\Container\Tests;
+namespace Celema\Container\Tests;
 
-use Celemas\Container\Container;
+use Celema\Container\Container;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 /**

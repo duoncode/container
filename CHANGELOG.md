@@ -1,16 +1,23 @@
 # Changelog
 
-## [Unreleased](https://codeberg.org/celemas/container/compare/0.4.0...HEAD)
+## [Unreleased](https://codeberg.org/celema/container/compare/0.4.0...HEAD)
 
-No notable changes since the last release.
+### Changed
 
-## [0.4.0](https://codeberg.org/celemas/container/src/tag/0.4.0) (2026-05-12)
+- Renamed the Composer package to `celema/container` and moved PHP classes from `Celemas\Container` to `Celema\Container`.
+- Updated the autowiring integration to `celema/wire:^0.7` and the `Celema\Wire` namespace.
+
+### Removed
+
+- Removed the previous Composer package name and PHP namespaces; consumers must update their dependency and imports.
+
+## [0.4.0](https://codeberg.org/celema/container/src/tag/0.4.0) (2026-05-12)
 
 ### Breaking Changes
 
 - Rename package metadata, root namespace, repository URLs, homepage, and author info.
 
-## [0.3.0](https://codeberg.org/celemas/container/src/tag/0.3.0) (2026-04-26)
+## [0.3.0](https://codeberg.org/celema/container/src/tag/0.3.0) (2026-04-26)
 
 ### Breaking
 
@@ -33,7 +40,7 @@ No notable changes since the last release.
 - Scope tags now layer over matching root tags and keep scope-local caches.
 - Scope reset now clears local entries/caches and resets used resettable services (including scope tags).
 
-## [0.2.0](https://codeberg.org/celemas/container/src/tag/0.2.0) (2026-02-21)
+## [0.2.0](https://codeberg.org/celema/container/src/tag/0.2.0) (2026-02-21)
 
 Project renamed from celemas/registry to celemas/container.
 
@@ -46,7 +53,7 @@ Codename: Jonas
 - Main class renamed from `Registry` to `Container`
 - Parameter `includeRegistry` renamed to `includeContainer`
 
-## [0.1.0](https://codeberg.org/celemas/container/src/tag/0.1.0) (2026-01-30)
+## [0.1.0](https://codeberg.org/celema/container/src/tag/0.1.0) (2026-01-30)
 
 Initial release.
 

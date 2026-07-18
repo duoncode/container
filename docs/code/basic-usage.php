@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-use Celemas\Container\Container;
+use Celema\Container\Container;
 
 class Value
 {

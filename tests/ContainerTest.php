@@ -239,6 +239,48 @@ final class ContainerTest extends TestCase
 		$this->assertSame(Container::class, $container->tag('api')->definition('container'));
 	}
 
+	public function testEntryOnTagFromScopeResolvesRootRegistration(): void
+	{
+		$container = new Container();
+		$container->tag('api')->add('handle', TestClass::class);
+		$scopeTag = $container->scope()->tag('api');
+
+		$this->assertSame(TestClass::class, $scopeTag->entry('handle')->definition());
+	}
+
+	public function testEntriesOnTagFromScopeListRootRegistrations(): void
+	{
+		$container = new Container();
+		$container->tag('api')->add('first', TestClass::class);
+		$container->tag('api')->add('second', TestClass::class);
+		$scopeTag = $container->scope()->tag('api');
+		$scopeTag->add('third', TestClass::class);
+
+		$entries = $scopeTag->entries();
+		sort($entries);
+
+		$this->assertSame(['first', 'second', 'third'], $entries);
+	}
+
+	public function testEntriesOnTagDoNotLeakContainerRegistrations(): void
+	{
+		$container = new Container();
+		$container->add('service', TestClass::class);
+		$container->tag('api')->add('handle', TestClass::class);
+
+		// A tag lists what was tagged; the owning container is its parent, and
+		// inheriting from that would report every service under the tag.
+		$this->assertSame(['handle'], $container->tag('api')->entries());
+		$this->assertSame(['handle'], $container->scope()->tag('api')->entries());
+	}
+
+	public function testFailingEntry(): void
+	{
+		$this->throws(NotFoundException::class, 'Unresolvable entry');
+
+		new Container()->tag('api')->entry('missing');
+	}
+
 	public function testFailingDefinition(): void
 	{
 		$this->throws(NotFoundException::class, 'Unresolvable');

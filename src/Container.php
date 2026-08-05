@@ -92,7 +92,10 @@ class Container implements WireContainer
 	/** @return list<string> */
 	public function entries(bool $includeContainer = false): array
 	{
-		$keys = array_keys($this->entries);
+		$inherited = $this->taggedParent()?->entries(true) ?? [];
+		$keys = $inherited === []
+			? array_keys($this->entries)
+			: array_values(array_unique([...array_keys($this->entries), ...$inherited]));
 
 		if ($includeContainer) {
 			return $keys;
@@ -106,7 +109,19 @@ class Container implements WireContainer
 
 	public function entry(string $id): Entry
 	{
-		return $this->entries[$id];
+		$entry = $this->entries[$id] ?? null;
+
+		if ($entry !== null) {
+			return $entry;
+		}
+
+		$parent = $this->taggedParent();
+
+		if ($parent !== null) {
+			return $parent->entry($id);
+		}
+
+		throw new NotFoundException('Unresolvable entry - id: ' . $id);
 	}
 
 	#[Override]
@@ -442,6 +457,20 @@ class Container implements WireContainer
 		}
 
 		return $this->parent?->findEntry($id);
+	}
+
+	/**
+	 * The tag container holding the registrations this one inherits.
+	 *
+	 * A scope's tag container starts out empty — tag() links it to the root's
+	 * container for the same tag, and the registrations live there. Only a
+	 * same-tag parent counts: a tag container on a non-scope container has the
+	 * owning container as its parent, and inheriting from that would list every
+	 * service in the container under the tag.
+	 */
+	protected function taggedParent(): ?Container
+	{
+		return $this->tag !== '' && $this->parent?->tag === $this->tag ? $this->parent : null;
 	}
 
 	protected function root(): Container

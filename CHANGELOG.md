@@ -1,17 +1,17 @@
 # Changelog
 
-## [Unreleased](https://codeberg.org/celema/container/compare/0.5.1...HEAD)
+## [Unreleased](https://codefloe.com/celema/container/compare/0.5.1...HEAD)
 
 No notable changes since the last release.
 
-## [0.5.1](https://codeberg.org/celema/container/src/tag/0.5.1) (2026-08-05)
+## [0.5.1](https://codefloe.com/celema/container/src/tag/0.5.1) (2026-08-05)
 
 ### Fixed
 
 - Tag registrations are visible from a scope again. `Container::scope()` creates an empty tag container linked to the root's container for the same tag, but `entries()` and `entry()` read only their own entries — unlike `has()` and `get()` — so everything registered under a tag looked absent inside a scope. Both now follow a same-tag parent. The walk deliberately stops there: a tag container on a non-scope container has the owning container as its parent, and a general parent walk would report every service in the container under the tag.
 - `Container::entry()` throws `NotFoundException` for an unknown id instead of returning `null` against its declared `Entry` return type, which surfaced as a `TypeError` at the call site. It now behaves like `definition()`.
 
-## [0.5.0](https://codeberg.org/celema/container/src/tag/0.5.0) (2026-07-18)
+## [0.5.0](https://codefloe.com/celema/container/src/tag/0.5.0) (2026-07-18)
 
 ### Changed
 
@@ -22,13 +22,13 @@ No notable changes since the last release.
 
 - Removed the previous Composer package name and PHP namespaces; consumers must update their dependency and imports.
 
-## [0.4.0](https://codeberg.org/celema/container/src/tag/0.4.0) (2026-05-12)
+## [0.4.0](https://codefloe.com/celema/container/src/tag/0.4.0) (2026-05-12)
 
 ### Breaking Changes
 
 - Rename package metadata, root namespace, repository URLs, homepage, and author info.
 
-## [0.3.0](https://codeberg.org/celema/container/src/tag/0.3.0) (2026-04-26)
+## [0.3.0](https://codefloe.com/celema/container/src/tag/0.3.0) (2026-04-26)
 
 ### Breaking
 
@@ -51,7 +51,7 @@ No notable changes since the last release.
 - Scope tags now layer over matching root tags and keep scope-local caches.
 - Scope reset now clears local entries/caches and resets used resettable services (including scope tags).
 
-## [0.2.0](https://codeberg.org/celema/container/src/tag/0.2.0) (2026-02-21)
+## [0.2.0](https://codefloe.com/celema/container/src/tag/0.2.0) (2026-02-21)
 
 Project renamed from celemas/registry to celemas/container.
 
@@ -64,7 +64,7 @@ Codename: Jonas
 - Main class renamed from `Registry` to `Container`
 - Parameter `includeRegistry` renamed to `includeContainer`
 
-## [0.1.0](https://codeberg.org/celema/container/src/tag/0.1.0) (2026-01-30)
+## [0.1.0](https://codefloe.com/celema/container/src/tag/0.1.0) (2026-01-30)
 
 Initial release.
 

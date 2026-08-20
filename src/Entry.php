@@ -81,14 +81,14 @@ class Entry
 			} else {
 				throw new ContainerException(
 					'Container entry arguments can be passed as a single associative array, '
-					. 'as named arguments, or as a Closure',
+						. 'as named arguments, or as a Closure',
 				);
 			}
 		} elseif ($numArgs > 1) {
 			if (!is_string(array_key_first($args))) {
 				throw new ContainerException(
 					'Container entry arguments can be passed as a single associative array, '
-					. 'as named arguments, or as a Closure',
+						. 'as named arguments, or as a Closure',
 				);
 			}
 

@@ -84,8 +84,8 @@ class Container implements WireContainer
 	{
 		return (
 			isset($this->entries[$id])
-			|| $this->parent?->has($id)
-			|| $this->wrappedContainer?->has($id)
+				|| $this->parent?->has($id)
+				|| $this->wrappedContainer?->has($id)
 		);
 	}
 
